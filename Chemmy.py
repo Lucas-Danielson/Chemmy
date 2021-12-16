@@ -65,7 +65,7 @@ async def on_message(message):
     commandList = "Commands: \n!homework - Displays today's homework\n!homework [mm/dd] - Displays homework on a specific day "
 
     #!commands
-    if message.content == '!commands':
+        if message.content == '!commands':
         response = commandList
         actionLog("command list command")
         await message.channel.send(response)
@@ -96,6 +96,7 @@ async def on_message(message):
                 pass
             actionLog("homework command")
             await message.channel.send(response)
+        #!Homework command. !Homework [mm/dd] gives an index error if there is no date attached to command
         except IndexError:      
             data = sheet.get_all_records()
             now = datetime.datetime.now()
@@ -115,6 +116,9 @@ async def on_message(message):
                     response = "There was a test today, no homework!"   
                 else:
                     response = "Today's homework is " + hw
+                updDate = sheet.cell(1, 4).value
+                calLink = sheet.cell(1, 6).value
+                response = response + "\n\nLast updated on: " + updDate + ". \nCheck calender if something seems wrong.\n" + calLink
             except UnboundLocalError:  
                 pass
             except Exception as e:
@@ -122,5 +126,4 @@ async def on_message(message):
                 pass
             actionLog("homework command")
             await message.channel.send(response)
-
 client.run(TOKEN)
